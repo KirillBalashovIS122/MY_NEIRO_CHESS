@@ -9,10 +9,10 @@ class ChessAI:
 
     def build_model(self):
         model = Sequential([
-            Flatten(input_shape=(8, 8, 12)),  # 8x8 board, 12 channels (one for each piece type and color)
+            Flatten(input_shape=(8, 8, 12)),  # 8x8 board, 12 channels (piece types/colors)
             Dense(256, activation='relu'),
             Dense(128, activation='relu'),
-            Dense(4096, activation='softmax')  # Output layer with one neuron per possible move
+            Dense(4096, activation='softmax')  # Output: one neuron per move
         ])
         model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
         return model
@@ -24,10 +24,17 @@ class ChessAI:
         board = chess.Board(board_fen)
         legal_moves = list(board.legal_moves)
         if not legal_moves:
+            print("No legal moves available for AI")  # Важное сообщение
             return None
+
         board_state = self.board_to_input(board)
         predictions = self.model.predict(board_state)
         best_move_index = tf.argmax(predictions, axis=1).numpy()[0]
+
+        if best_move_index >= len(legal_moves):
+            print("Error: Predicted index out of range")  # Важное сообщение
+            return None
+
         return legal_moves[best_move_index].uci()
 
     def board_to_input(self, board):
