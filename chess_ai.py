@@ -1,6 +1,7 @@
 import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Flatten
+import chess
 
 class ChessAI:
     def __init__(self):
@@ -11,7 +12,7 @@ class ChessAI:
             Flatten(input_shape=(8, 8, 12)),  # 8x8 board, 12 channels (one for each piece type and color)
             Dense(256, activation='relu'),
             Dense(128, activation='relu'),
-            Dense(len(chess.Move), activation='softmax')  # Output layer with one neuron per possible move
+            Dense(4096, activation='softmax')  # Output layer with one neuron per possible move
         ])
         model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
         return model
