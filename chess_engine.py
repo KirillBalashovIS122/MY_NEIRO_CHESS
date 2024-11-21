@@ -13,7 +13,6 @@ class ChessEngine:
         return True
 
     def get_legal_moves(self):
-        # Возвращает все возможные ходы
         return [move.uci() for move in self.board.legal_moves]
 
     def is_game_over(self):
@@ -26,5 +25,4 @@ class ChessEngine:
         return chess.svg.board(self.board)
 
     def reset(self):
-        # Сбрасывает доску к начальному состоянию
         self.board.reset()

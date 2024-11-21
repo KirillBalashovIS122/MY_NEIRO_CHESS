@@ -13,7 +13,6 @@ class Assets:
     def load_svg(self, path):
         with open(path, "rb") as svg_file:
             svg_data = svg_file.read()
-        # Convert SVG to PNG using cairosvg
         png_data = cairosvg.svg2png(bytestring=svg_data, output_width=self.SQUARE_SIZE, output_height=self.SQUARE_SIZE)
         png_file = Image.open(BytesIO(png_data)).convert("RGBA")
         return pygame.image.fromstring(png_file.tobytes(), png_file.size, png_file.mode)

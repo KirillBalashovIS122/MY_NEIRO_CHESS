@@ -4,7 +4,6 @@ from game import Game
 
 pygame.init()
 
-# Constants
 WIDTH, HEIGHT = 600, 600
 
 # Initialize game

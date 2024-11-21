@@ -12,8 +12,8 @@ class Game:
         self.chess_ai = ChessAI()
         self.assets = Assets(screen)
         self.selected_piece = None
-        self.move_history = []  # История ходов
-        self.move_number = 1  # Номер хода
+        self.move_history = []
+        self.move_number = 1
 
     def draw_board(self):
         for row in range(8):
@@ -32,7 +32,6 @@ class Game:
     def handle_move(self, start_square, end_square):
         piece = self.chess_engine.board.piece_at(start_square)
         
-        # Проверяем, есть ли фигура на выбранной клетке
         if piece is None:
             print("No piece selected")
             return False
@@ -41,7 +40,7 @@ class Game:
         if move in self.chess_engine.board.legal_moves:
             self.chess_engine.make_move(move.uci())
             move_info = self.format_move_info(piece, start_square, end_square)
-            self.move_history.append(move_info)  # Добавляем ход в историю
+            self.move_history.append(move_info)
             print(f"Move executed: {move}")
             self.move_number += 1
             return True
@@ -50,7 +49,6 @@ class Game:
         return False
 
     def format_move_info(self, piece, start_square, end_square):
-        # Проверяем, есть ли фигура
         if piece is None:
             return "No piece selected"
         
@@ -70,18 +68,17 @@ class Game:
     def display_move_history(self):
         font = pygame.font.Font(None, 24)
         y_offset = 50
-        for i, move in enumerate(self.move_history[-5:]):  # Показываем последние 5 ходов
+        for i, move in enumerate(self.move_history[-5:]):
             text = font.render(f"{i + 1}: {move}", True, (0, 0, 0))
             self.screen.blit(text, (10, y_offset))
             y_offset += 20
 
     def display_current_move(self):
-        # Выводим текущий ход с информацией о фигуре, начальной и конечной клетке
         current_move = self.move_history[-1] if self.move_history else ""
         font = pygame.font.Font(None, 36)
         move_text = f"Move {self.move_number}: {current_move}"
         text = font.render(move_text, True, (0, 0, 0))
-        self.screen.blit(text, (10, 100))  # Место для текущего хода
+        self.screen.blit(text, (10, 100))
 
     def run(self, game_mode):
         running = True
@@ -112,14 +109,14 @@ class Game:
                         ai_move = self.chess_ai.predict_move(self.chess_engine.get_board_fen())
                         if ai_move:
                             self.chess_engine.make_move(ai_move)
-                            print(f"AI move: {ai_move}")  # Лог только хода ИИ
+                            print(f"AI move: {ai_move}")
                         time.sleep(1)
 
             self.draw_board()
             self.draw_pieces()
             self.display_turn()
             self.display_move_history()
-            self.display_current_move()  # Выводим текущий ход
+            self.display_current_move()
             pygame.display.flip()
 
         self.chess_engine.reset()
