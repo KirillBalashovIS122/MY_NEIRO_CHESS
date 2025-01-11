@@ -38,6 +38,11 @@ class Game:
 
         move = chess.Move(start_square, end_square)
         if move in self.chess_engine.board.legal_moves:
+            # Проверка на превращение пешки
+            if piece.piece_type == chess.PAWN:
+                if chess.square_rank(end_square) == 7 or chess.square_rank(end_square) == 0:
+                    move.promotion = chess.QUEEN  # Превращение в ферзя
+
             self.chess_engine.make_move(move.uci())
             move_info = self.format_move_info(piece, start_square, end_square)
             self.move_history.append(move_info)
@@ -80,7 +85,7 @@ class Game:
         text = font.render(move_text, True, (0, 0, 0))
         self.screen.blit(text, (10, 100))
 
-    def run(self, game_mode):
+    def run(self, game_mode, chess_ai=None):
         running = True
         while running:
             if self.chess_engine.is_game_over():
@@ -106,11 +111,12 @@ class Game:
                             self.selected_piece = square
 
                     if game_mode == "PvAI" and self.chess_engine.board.turn == chess.BLACK:
-                        ai_move = self.chess_ai.predict_move(self.chess_engine.get_board_fen())
-                        if ai_move:
-                            self.chess_engine.make_move(ai_move)
-                            print(f"AI move: {ai_move}")
-                        time.sleep(1)
+                        if chess_ai:
+                            ai_move = chess_ai.predict_move(self.chess_engine.get_board_fen())
+                            if ai_move:
+                                self.chess_engine.make_move(ai_move)
+                                print(f"AI move: {ai_move}")
+                            time.sleep(1)
 
             self.draw_board()
             self.draw_pieces()
