@@ -4,7 +4,15 @@ import cairosvg
 from PIL import Image
 from io import BytesIO
 
+
 class Assets:
+        
+    """_summary_
+
+    Returns:
+        _type_: _description_
+    """
+        
     def __init__(self, screen):
         self.screen = screen
         self.SQUARE_SIZE = screen.get_width() // 8
